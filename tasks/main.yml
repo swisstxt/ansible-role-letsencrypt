@@ -1,0 +1,37 @@
+---
+- name: install and update certbot
+  package:
+    name: certbot
+    state: latest
+
+- name: create folders
+  file:
+    name: "{{ item }}"
+    mode: 0750
+    state: directory
+  with_items:
+    - "{{ letsencrypt_config_dir }}"
+    - "{{ letsencrypt_work_dir }}"
+    - "{{ letsencrypt_log_dir }}"
+
+- name: install certbot config
+  template:
+    src: cli.ini.j2
+    dest: "{{ letsencrypt_config_dir }}/cli.ini"
+    mode: 0640
+
+- name: create certificates
+  command: certbot certonly --config '{{ letsencrypt_config_dir }}/cli.ini' --domain {{ ([item.main] + item.domains) | map('quote') | join(' --domain ') }} --tls-sni-01-port {{ [ item.listen, letsencrypt_listen ] | reject("undefined") | reject("equalto", 0) | first }} --expand --force-renewal
+  args:
+    # Remove the key file if you want to regenerate the certificates
+    creates: "{{ letsencrypt_config_dir }}/live/{{ item.main }}/privkey.pem"
+  with_items: "{{ letsencrypt_certificates }}"
+
+- name: install verification cron job
+  cron:
+    name: "reverify letsencrypt certificates"
+    # TODO replace this with {{ 59 | random(seed=inventory_hostname) }} when Ansible 2.3 is out
+    minute: "{{ 59 | random }}"
+    hour: "0,12"
+    job: "certbot renew --config '{{ letsencrypt_config_dir }}/cli.ini'"
+  when: letsencrypt_cron

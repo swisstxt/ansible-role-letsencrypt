@@ -1,0 +1,25 @@
+# {{ ansible_managed }}
+
+text = True
+non-interactive = True
+
+#rsa-key-size = 4096
+email = {{ letsencrypt_email }}
+
+# Enabling these two forces renewal every time, even if they're False... WTF
+#expand = True
+#force-renewal = True
+agree-tos = True
+no-self-upgrade = True
+
+config-dir = {{ letsencrypt_config_dir }}
+work-dir = {{ letsencrypt_work_dir }}
+logs-dir = {{ letsencrypt_log_dir }}
+
+authenticator = standalone
+preferred-challenges = tls-sni-01 
+tls-sni-01-port = {{ letsencrypt_listen }}
+
+pre-hook = systemctl stop {{ letsencrypt_services | join(' ') }}
+post-hook = systemctl start {{ letsencrypt_services | join(' ') }}
+renew-hook = cat "$RENEWED_LINEAGE/privkey.pem" "$RENEWED_LINEAGE/fullchain.pem" > "$RENEWED_LINEAGE/privkey-fullchain.pem" && chmod 0640 "$RENEWED_LINEAGE/privkey-fullchain.pem"

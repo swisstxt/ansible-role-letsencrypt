@@ -1,0 +1,10 @@
+---
+letsencrypt_config_dir: /etc/letsencrypt
+letsencrypt_work_dir: /var/lib/letsencrypt
+letsencrypt_log_dir: /var/log/letsencrypt
+letsencrypt_listen: 443
+letsencrypt_cron: yes
+letsencrypt_services: []
+letsencrypt_certificates:
+  - main: "{{ ansible_fqdn }}"
+    domains: []
