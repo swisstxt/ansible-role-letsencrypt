@@ -27,6 +27,12 @@
     creates: "{{ letsencrypt_config_dir }}/live/{{ item.main }}/privkey.pem"
   with_items: "{{ letsencrypt_certificates }}"
 
+- name: bundle certificate and key (on creation only)
+  shell: cat '{{ letsencrypt_config_dir }}/live/{{ item.main }}/privkey.pem' '{{ letsencrypt_config_dir }}/live/{{ item.main }}/fullchain.pem' > '{{ letsencrypt_config_dir }}/live/{{ item.main }}/privkey-fullchain.pem' && chmod 0640 '{{ letsencrypt_config_dir }}/live/{{ item.main }}/privkey-fullchain.pem'
+  args:
+    creates: "{{ letsencrypt_config_dir }}/live/{{ item.main }}/privkey-fullchain.pem"
+  with_items: "{{ letsencrypt_certificates }}"
+
 - name: install verification cron job
   cron:
     name: "reverify letsencrypt certificates"
