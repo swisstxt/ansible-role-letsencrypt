@@ -39,5 +39,5 @@
     # TODO replace this with {{ 59 | random(seed=inventory_hostname) }} when Ansible 2.3 is out
     minute: "{{ 59 | random }}"
     hour: "0,12"
-    job: "certbot renew --config '{{ letsencrypt_config_dir }}/cli.ini'"
+    job: "certbot renew --config '{{ letsencrypt_config_dir }}/cli.ini' --tls-sni-01-port {{ [ item.tls, letsencrypt_listen_tls ] | reject('undefined') | reject('equalto', 0) | first }} --http-01-port {{ [ item.http, letsencrypt_listen_http ] | reject('undefined') | reject('equalto', 0) | first }}"
   when: letsencrypt_cron
