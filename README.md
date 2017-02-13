@@ -33,14 +33,15 @@ Role Variables
 * letsencrypt_config_dir: The destination folder for config, certificates and keys. Default: /etc/letsencrypt
 * letsencrypt_work_dir: The certificate generator temp directory. Default: /var/lib/letsencrypt
 * letsencrypt_log_dir: Where to put log files. Default: /var/log/letsencrypt
-* letsencrypt_verify_tls: Use TLS when verifying certificates. May not always work when traffic goes through a proxy. Default: yes
-* letsencrypt_listen: Specify the builtin web server port. Required for domain verification. Can also be overriden per certificate. Default: 443
+* letsencrypt_verify_protocols: The challenges to try when verifying a host. Default: tls-sni-01,http-01,dns
+* letsencrypt_listen_tls: Specify the builtin TLS server port. Required for domain verification. Can also be overriden per certificate. Default: 443
+* letsencrypt_listen_http: Specify the builtin HTTP server port. Either this or TLS must be available. Can also be overriden per certificate. Default: 80
 * letsencrypt_cron: Set to false to disable creation of a cron job. Default: true
 * letsencrypt_email: Specify the admin contact email address for this domain. Default: none; must be specified
 * letsencrypt_services: An optional list of services that should be stopped and restarted while certificates are created or renewed. Default: none
 * letsencrpyt_certificates: List of certificates to generate. Each definition must contain a name (usually the main domain) and all domains to sign for.
   Note that the target host must be reachable under all these domains.
-  It is also possible to specify a separate listen port per certificate. Default: [ { main: ansible_fqdn, listen: <undefined>, domains: [ ] } ]
+  It is also possible to specify a separate listen port per certificate. Default: [ { main: ansible_fqdn, tls: <undefined>, http: <undefined>, domains: [ ] } ]
 
 
 Example Playbook
@@ -48,14 +49,15 @@ Example Playbook
 
     - hosts: ssl
       roles:
-       - role: letsencrypt
-         letsencrypt_cron: no
-         letsencrypt_listen: 8080
-         letsencrypt_domains:
-           - main: www.example.com
-             domains: example.com
-           - main: www.example2.com
-             listen: 8081
+      - role: letsencrypt
+        letsencrypt_cron: no
+        letsencrypt_verify_protocols: http-01
+        letsencrypt_listen_http: 8080
+        letsencrypt_domains:
+        - main: www.example.com
+          domains: example.com
+        - main: www.example2.com
+          http: 8081
 
 
 Copyright

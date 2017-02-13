@@ -17,8 +17,9 @@ work-dir = {{ letsencrypt_work_dir }}
 logs-dir = {{ letsencrypt_log_dir }}
 
 authenticator = standalone
-preferred-challenges = {{ "tls-sni-01" if letsencrypt_verify_tls else "http" }}
-tls-sni-01-port = {{ letsencrypt_listen }}
+preferred-challenges = {{ letsencrypt_verify_protocols }}
+tls-sni-01-port = {{ letsencrypt_listen_tls }}
+http-01-port = {{ letsencrypt_listen_http }}
 
 pre-hook = systemctl stop {{ letsencrypt_services | join(' ') }}
 post-hook = systemctl start {{ letsencrypt_services | join(' ') }}
