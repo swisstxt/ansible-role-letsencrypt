@@ -33,6 +33,7 @@ Role Variables
 * letsencrypt_config_dir: The destination folder for config, certificates and keys. Default: /etc/letsencrypt
 * letsencrypt_work_dir: The certificate generator temp directory. Default: /var/lib/letsencrypt
 * letsencrypt_log_dir: Where to put log files. Default: /var/log/letsencrypt
+* letsencrypt_verify_tls: Use TLS when verifying certificates. May not always work when traffic goes through a proxy. Default: yes
 * letsencrypt_listen: Specify the builtin web server port. Required for domain verification. Can also be overriden per certificate. Default: 443
 * letsencrypt_cron: Set to false to disable creation of a cron job. Default: true
 * letsencrypt_email: Specify the admin contact email address for this domain. Default: none; must be specified
