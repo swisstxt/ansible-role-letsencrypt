@@ -42,7 +42,9 @@ Role Variables
 * letsencrypt_services_reload: An optional list of services that should be reloaded after certificates are created or renewed. Default: none
 * letsencrpyt_certificates: List of certificates to generate. Each definition must contain a name (usually the main domain) and all domains to sign for.
   Note that the target host must be reachable under all these domains.
-  It is also possible to specify a separate listen port per certificate. Default: [ { main: ansible_fqdn, tls: <undefined>, http: <undefined>, domains: [ ] } ]
+  It is also possible to specify a separate listen port per certificate.
+  If you would like to create test certificates (not valid for server verification), add `test: yes`.
+  Default: [ { main: ansible_fqdn, tls: <undefined>, http: <undefined>, test: no, domains: [ ] } ]
 
 
 Example Playbook
@@ -59,6 +61,7 @@ Example Playbook
           domains: example.com
         - main: www.example2.com
           http: 8081
+          test: yes
 
 
 Copyright

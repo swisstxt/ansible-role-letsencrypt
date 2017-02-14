@@ -21,7 +21,7 @@
     mode: 0640
 
 - name: create certificates
-  command: certbot certonly --config '{{ letsencrypt_config_dir }}/cli.ini' --domain {{ ([item.main] + item.domains) | map('quote') | join(' --domain ') }} --tls-sni-01-port {{ [ item.tls, letsencrypt_listen_tls ] | reject("undefined") | reject("equalto", 0) | first }} --http-01-port {{ [ item.http, letsencrypt_listen_http ] | reject("undefined") | reject("equalto", 0) | first }} --expand --force-renewal
+  command: certbot certonly --config '{{ letsencrypt_config_dir }}/cli.ini' --domain {{ ([item.main] + (item.domains | default([]))) | map('quote') | join(' --domain ') }} --tls-sni-01-port {{ [ item.tls, letsencrypt_listen_tls ] | reject("undefined") | reject("equalto", 0) | first }} --http-01-port {{ [ item.http, letsencrypt_listen_http ] | reject("undefined") | reject("equalto", 0) | first }} --expand {{ "--test-cert" if item.test | default(false) else "" }}
   args:
     # Remove the key file if you want to regenerate the certificates
     creates: "{{ letsencrypt_config_dir }}/live/{{ item.main }}/privkey.pem"
