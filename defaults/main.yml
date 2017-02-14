@@ -6,7 +6,8 @@ letsencrypt_verify_protocols: tls-sni-01,http-01,dns
 letsencrypt_listen_tls: 443
 letsencrypt_listen_http: 80
 letsencrypt_cron: yes
-letsencrypt_services: []
+letsencrypt_services_restart: []
+letsencrypt_services_reload: []
 letsencrypt_certificates:
   - main: "{{ ansible_fqdn }}"
     domains: []

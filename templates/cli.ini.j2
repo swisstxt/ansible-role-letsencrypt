@@ -21,8 +21,11 @@ preferred-challenges = {{ letsencrypt_verify_protocols }}
 tls-sni-01-port = {{ letsencrypt_listen_tls }}
 http-01-port = {{ letsencrypt_listen_http }}
 
-{% if letsencrypt_services is defined and letsencrypt_services %}
+{% if letsencrypt_services_restart | default([]) %}
 pre-hook = systemctl stop {{ letsencrypt_services | join(' ') }}
-post-hook = systemctl start {{ letsencrypt_services | join(' ') }}
+post-hook = systemctl start {{ letsencrypt_services_restart | join(' ') }}
+{% endif %}
+{% if letsencrypt_services_reload | default([]) %}
+post-hook = systemctl reload {{ letsencrypt_services_reload | join(' ') }}
 {% endif %}
 renew-hook = cat "$RENEWED_LINEAGE/privkey.pem" "$RENEWED_LINEAGE/fullchain.pem" > "$RENEWED_LINEAGE/privkey-fullchain.pem" && chmod 0640 "$RENEWED_LINEAGE/privkey-fullchain.pem"

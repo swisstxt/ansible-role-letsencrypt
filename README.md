@@ -38,7 +38,8 @@ Role Variables
 * letsencrypt_listen_http: Specify the builtin HTTP server port. Either this or TLS must be available. Can also be overriden per certificate. Default: 80
 * letsencrypt_cron: Set to false to disable creation of a cron job. Default: true
 * letsencrypt_email: Specify the admin contact email address for this domain. Default: none; must be specified
-* letsencrypt_services: An optional list of services that should be stopped and restarted while certificates are created or renewed. Default: none
+* letsencrypt_services_restart: An optional list of services that should be stopped and restarted while certificates are created or renewed. Default: none
+* letsencrypt_services_reload: An optional list of services that should be reloaded after certificates are created or renewed. Default: none
 * letsencrpyt_certificates: List of certificates to generate. Each definition must contain a name (usually the main domain) and all domains to sign for.
   Note that the target host must be reachable under all these domains.
   It is also possible to specify a separate listen port per certificate. Default: [ { main: ansible_fqdn, tls: <undefined>, http: <undefined>, domains: [ ] } ]
