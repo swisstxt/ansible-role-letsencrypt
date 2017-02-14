@@ -33,7 +33,7 @@ Role Variables
 * letsencrypt_config_dir: The destination folder for config, certificates and keys. Default: /etc/letsencrypt
 * letsencrypt_work_dir: The certificate generator temp directory. Default: /var/lib/letsencrypt
 * letsencrypt_log_dir: Where to put log files. Default: /var/log/letsencrypt
-* letsencrypt_verify_protocols: The challenges to try when verifying a host. Default: tls-sni-01,http-01,dns
+* letsencrypt_verify_protocols: The challenges to try when verifying a host. Default: tls,http,dns
 * letsencrypt_listen_tls: Specify the builtin TLS server port. Required for domain verification. Can also be overriden per certificate. Default: 443
 * letsencrypt_listen_http: Specify the builtin HTTP server port. Either this or TLS must be available. Can also be overriden per certificate. Default: 80
 * letsencrypt_cron: Set to false to disable creation of a cron job. Default: true
@@ -54,7 +54,7 @@ Example Playbook
       roles:
       - role: letsencrypt
         letsencrypt_cron: no
-        letsencrypt_verify_protocols: http-01
+        letsencrypt_verify_protocols: http
         letsencrypt_listen_http: 8080
         letsencrypt_domains:
         - main: www.example.com

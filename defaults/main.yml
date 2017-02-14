@@ -2,7 +2,7 @@
 letsencrypt_config_dir: /etc/letsencrypt
 letsencrypt_work_dir: /var/lib/letsencrypt
 letsencrypt_log_dir: /var/log/letsencrypt
-letsencrypt_verify_protocols: tls-sni-01,http-01,dns
+letsencrypt_verify_protocols: tls,http,dns
 letsencrypt_listen_tls: 443
 letsencrypt_listen_http: 80
 letsencrypt_cron: yes
