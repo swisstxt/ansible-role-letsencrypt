@@ -22,7 +22,7 @@ tls-sni-01-port = {{ letsencrypt_listen_tls }}
 http-01-port = {{ letsencrypt_listen_http }}
 
 {% if letsencrypt_services_restart | default([]) %}
-pre-hook = systemctl stop {{ letsencrypt_services | join(' ') }}
+pre-hook = systemctl stop {{ letsencrypt_services_restart | join(' ') }}
 post-hook = systemctl start {{ letsencrypt_services_restart | join(' ') }}
 {% endif %}
 {% if letsencrypt_services_reload | default([]) %}
